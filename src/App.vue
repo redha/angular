@@ -2,7 +2,7 @@
   <div id="app">
   <form @submit.prevent="AddTask">
     <input type="text" class="search-input" v-model="todoToAdd" placeholder="New Todo Here..."/>
-    <button type="submit" :disabled="todoToAdd.length == 0">+</button>
+    <button type="submit" :disabled="todoToAdd.length < 2">+</button>
   </form>
   <section id="uncompleted">
     <h2>To Do ({{ UncompletedTasks.length }}): </h2>
@@ -92,18 +92,19 @@ input, button {
   border:none;
   padding:5px;
   font-size: 1.3em;
+  background: none;
 }
 button{
-  min-width: 50px;
-  border-radius: 5px;
+  margin-left: -50px;
+  width: 50px;
   color:black;
+  cursor: pointer;
 }
 .search-input{
   width:90%;
   border-bottom: solid 2px #222;
   margin:10px;
-  padding-left:7px;
-  background: none;
+  padding-right: 70px;
 }
 #app {
   font-family: 'Avenir', Helvetica, Arial, sans-serif;
@@ -111,6 +112,6 @@ button{
   -moz-osx-font-smoothing: grayscale;
 
   color: #2c3e50;
-  margin: 10px auto;
+  margin-left:auto;
 }
 </style>
