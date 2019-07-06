@@ -1,29 +1,39 @@
 <template>
   <div id="app">
   <form @submit.prevent="AddTask">
-    <input type="text" class="search-input" v-model="todoToAdd" placeholder="New Todo Here..."/>
-    <button type="submit" :disabled="todoToAdd.length < 2">+</button>
+    <input type="text" class="search-input" v-model="taskToAdd" placeholder="Add New Task"/>
+    <button type="submit" :disabled="taskToAdd.length < 2">+</button>
   </form>
   <section id="uncompleted">
-    <h2>To Do ({{ UncompletedTasks.length }}): </h2>
-    <todo v-for="uncompletedTask in UncompletedTasks" 
+    <h2>To Do ({{ uncompletedTasks.length }}): </h2>
+    <todo v-for="uncompletedTask in uncompletedTasks" 
           :key="uncompletedTask.id" 
-          @complete = "TaskCompleted"
-          @delete = "DeleteTask"
-
+          @complete = "CompleteATask"
+          @delete = "ToggleDeletedTask"
           :task="uncompletedTask"
     />
+    <div v-if="uncompletedTasks.length == 0">
+      <br/>The task list is Empty !! I'm the most busy human been in the whole Universe !
+    </div>
   </section>
   <section id="completedTasks" v-if="completedTasks.length > 0">
     <h2>Completed ({{ completedTasks.length }} / {{ tasksList.length }}): </h2>
     <todo v-for="completedTask in completedTasks" 
             :key="completedTask.id" 
-            @delete = "DeleteTask"
-            
+            @delete = "ToggleDeletedTask"   
             :task="completedTask"
       />
   </section>
-  </div>
+  <section id="deletedTasks" v-if="deletedTasks.length > 0">
+    <a href="" @click.prevent="EmptyRecycleBin" class="btn danger">Detete All<sup>{{ deletedTasks.length }}</sup></a>
+    
+    <todo v-for="deletedTask in deletedTasks" 
+            :key="deletedTask.id" 
+            @delete = "ToggleDeletedTask"
+            :task="deletedTask"
+      />
+  </section>
+</div>
 </template>
 
 <script>
@@ -38,36 +48,43 @@ export default {
     return (
       {
     tasksList:[],
-    todoToAdd: "",
+    taskToAdd: "",
       }
     )
   },
   methods:{
-    TaskCompleted: function (task){
+    AddTask: function(){
+      var i = new Date().getTime();
+      this.tasksList.unshift({id: i, label:this.taskToAdd, done:false, deleted:false});
+      
+      this.taskToAdd = "";
+    },
+    CompleteATask: function (task){
       task.done = true;
       //console.log(event);
     },
-    DeleteTask: function(task){
+    ToggleDeletedTask: function(task){
       var i = this.tasksList.indexOf(task);
       if (i < 0) 
         return;
-      this.tasksList.splice(i, 1);
+      this.tasksList[i].deleted = this.tasksList[i].deleted ? false : true;
     },
-    AddTask: function(){
-      var i = new Date().getTime();
-      this.tasksList.unshift({id: i, label:this.todoToAdd, done:false});
-      
-      this.todoToAdd = "";
-    }
+    EmptyRecycleBin: function (){
+      this.tasksList = this.tasksList.filter(t => !t.deleted)
+    },
   },
   computed:{
     completedTasks: function () {
       // return the completed tasks only
-      return this.tasksList.filter ( (t) => t.done )
+      return this.tasksList.filter ( (t) => t.done && t.deleted === false )
     },
-    UncompletedTasks: function () {
+    uncompletedTasks: function () {
       // return the uncompleted tasks only
-      return this.tasksList.filter ( (t) => !t.done )
+      return this.tasksList.filter ( (t) => !t.done && t.deleted === false )
+    },
+    deletedTasks: function(){
+      // return the uncompleted tasks only
+      return this.tasksList.filter ( (t) => t.deleted === true )
     }
   }
 }
@@ -82,9 +99,18 @@ export default {
 body{
   background-image: linear-gradient(120deg, #0abde3, #341f97);
   min-height:100vh;
+  margin:0px 20px 0 20px;
 }
-h2{
-  margin:10px;
+#app {
+  font-family: 'Avenir', Helvetica, Arial, sans-serif;
+  -webkit-font-smoothing: antialiased;
+  -moz-osx-font-smoothing: grayscale;
+  color: #2c3e50;
+  margin-left:auto;
+  min-width: 350px;
+}
+
+section{
   margin-top:20px;
 }
 input, button {
@@ -95,23 +121,25 @@ input, button {
   background: none;
 }
 button{
-  margin-left: -50px;
+  margin-left: -2.3rem;
   width: 50px;
   color:black;
   cursor: pointer;
 }
+*:focus {
+    outline: none;
+}
 .search-input{
   width:90%;
   border-bottom: solid 2px #222;
-  margin:10px;
-  padding-right: 70px;
+  padding-right: 1.5rem;
 }
-#app {
-  font-family: 'Avenir', Helvetica, Arial, sans-serif;
-  -webkit-font-smoothing: antialiased;
-  -moz-osx-font-smoothing: grayscale;
-
-  color: #2c3e50;
-  margin-left:auto;
+sup {
+  font-size:x-small;
+  color:white;
+  background-color:#e74c3c;
+  padding: 3px;
+  border-radius:30%;
+	margin-left:3px;
 }
 </style>

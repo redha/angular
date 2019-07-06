@@ -32,14 +32,18 @@ npm run lint
 ```
 
 ## Working on
-[ ] Add visibility property to the task
-[ ] Do not delete task, mark it as invisible instead
+[X] Add visibility property to the task
+[X] Do not delete task, mark it as invisible instead
+[X] Empty Recylle Bin
+[X] Issue: On chromium, the input got borders onfocus 
+[ ] Issue: User shouldn't be able to add empty tasks nor extra whitespaces
+[ ] Add button when disabled, set the color to gray instead of black
 [ ] PWA
     [ ] Add manifest.js
     [ ] Offline Intgration 
     [ ] .... list all functionalities here
 [ ] persist all data in Database (or any other storage)
-
+[ ] Options: Add newest task to the top, Enable RecylceBin, Confirm Before Delete, ...
 
 ### Version 0.2.0 
 * Dock the add button to the right of the input area (nowrap)

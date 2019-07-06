@@ -1,8 +1,9 @@
 <template>
   <div class="todo-item">
     {{ task.label }}
-      <i @click="$emit('delete', task)" class="delete-action">X</i>
-      <i v-if="!task.done" @click="$emit('complete', task)" class="complete-action">O</i>
+    <img v-if="!task.done && !task.deleted" src="./../assets/check-mark.svg" @click="$emit('complete', task)" class="action-button" height="15px" width="15px">
+    <img v-if="!task.deleted" src="./../assets/close.svg" @click="$emit('delete', task)" class="action-button" height="13px" width="13px">
+    <img v-if="task.deleted" src="./../assets/upload.svg" @click="$emit('delete', task)" class="action-button" height="15px" width="15px">
   </div>
 </template>
 
@@ -21,23 +22,20 @@ export default {
 .todo-item{
   width: 90%;
   padding: 10px;
-  margin: 10px;
+  margin-top: 10px;
   background: rgba(255, 255, 2555, 0.5);
   background: rgba(255. 255, 255, 1);
   border-radius:5px;
-
 }
 i{
-    float: right;
-    margin: 5px;
-    cursor: pointer;
+  float: right;
+  margin: 5px;
+  cursor: pointer;
+  margin-top: 0px;
 }
-.delete-action{
-  color:red;
-  font-weight: bolder;
-}
-.complete-action{
-  color:green;
-  font-weight: bolder;
+.action-button{
+  margin-left: 5px;
+  float:right;
+  cursor:pointer;
 }
 </style>
