@@ -97,9 +97,9 @@ export default {
   box-sizing: border-box;
 }
 body{
-  background-image: linear-gradient(120deg, #0abde3, #341f97);
+  background-image: linear-gradient(120deg, #aa7bc3, #944bbb);
   min-height:100vh;
-  margin:0px 20px 0 20px;
+  margin:0px 20px;
 }
 #app {
   font-family: 'Avenir', Helvetica, Arial, sans-serif;
@@ -119,6 +119,9 @@ input, button {
   padding:5px;
   font-size: 1.3em;
   background: none;
+}
+::placeholder{
+   color: #444;
 }
 button{
   margin-left: -2.3rem;
