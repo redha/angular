@@ -12,7 +12,7 @@
     <meta name="theme-color" content="#2980b9">
     <meta name="apple-mobile-web-app-capable" content="yes">
     <meta name="apple-mobile-web-app-status-bar-style" content="black">
-    <meta name="apple-mobile-web-app-title" content="Todo
+    <meta name="apple-mobile-web-app-title" content="Todo">
     <link rel="apple-touch-icon" href="/icons/todo-icon-128x128.png">
 
   </head>
@@ -29,7 +29,7 @@
       console.log("Adding the Onload event listener...");
       window.addEventListener('load', () => {
         console.log("The page is loaded, let's register the service worker...");
-        navigator.serviceWorker.register('/service-worker.js')
+        navigator.serviceWorker.register('/sw.js')
           .then(() => {
             console.log(`Service Worker Registered:`);
         });

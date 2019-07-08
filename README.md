@@ -41,8 +41,8 @@ npm run lint
 [ ] PWA
     [X] Add manifest.js
     [ ] Page load is not fast enough !! should I cache index.html ?
-    [ ] current page does not repond with 200 when offline
-    [ ] Unable to fetch start URL via service worker (related with )
+    [X] current page does not repond with 200 when offline
+    [X] Unable to fetch start URL via service worker (related with )
     [ ] Offline Intgration 
     [ ] .... list all functionalities here
 [ ] persist all data in Database (or any other storage)

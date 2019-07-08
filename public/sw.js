@@ -4,7 +4,14 @@ const CACHE_NAME = 'static-cache-v001';
 
 // files to cache here... icons,...
 const FILES_TO_CACHE = [
-
+  "/",
+  "/index.html",
+  "favicon.ico",
+  "/offline.html",
+  "/icons/todo-icon-64x64.png",
+  "/icons/todo-icon-128x128.png",
+  "/icons/todo-icon-256x256.png",
+  "/icons/todo-icon-512x512.png",
 ];
 
 self.addEventListener('install', (evt) => {
