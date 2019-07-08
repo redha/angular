@@ -39,11 +39,15 @@ npm run lint
 [ ] Issue: User shouldn't be able to add empty tasks nor extra whitespaces
 [ ] Add button when disabled, set the color to gray instead of black
 [ ] PWA
-    [ ] Add manifest.js
+    [X] Add manifest.js
+    [ ] Page load is not fast enough !! should I cache index.html ?
+    [ ] current page does not repond with 200 when offline
+    [ ] Unable to fetch start URL via service worker (related with )
     [ ] Offline Intgration 
     [ ] .... list all functionalities here
 [ ] persist all data in Database (or any other storage)
 [ ] Options: Add newest task to the top, Enable RecylceBin, Confirm Before Delete, ...
+[ ] About & Credits (flaticon, vue, github, ...)
 
 ### Version 0.2.0 
 * Dock the add button to the right of the input area (nowrap)

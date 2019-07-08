@@ -4,8 +4,17 @@
     <meta charset="utf-8">
     <meta http-equiv="X-UA-Compatible" content="IE=edge">
     <meta name="viewport" content="width=device-width,initial-scale=1.0">
+    <meta name="descritpion" content="Todo app - work offline sync data when online">
     <link rel="icon" href="<%= BASE_URL %>favicon.ico">
+    <link rel="manifest" href="<%= BASE_URL %>manifest.json">
     <title>Todo</title>
+
+    <meta name="theme-color" content="#2980b9">
+    <meta name="apple-mobile-web-app-capable" content="yes">
+    <meta name="apple-mobile-web-app-status-bar-style" content="black">
+    <meta name="apple-mobile-web-app-title" content="Todo
+    <link rel="apple-touch-icon" href="/icons/todo-icon-128x128.png">
+
   </head>
   <body>
     <noscript>
@@ -13,5 +22,19 @@
     </noscript>
     <div id="app"></div>
     <!-- built files will be auto injected -->
+    <script>
+      document.title = new Date().toLocaleTimeString();
+      console.log("I'm in...");
+      if ('serviceWorker' in navigator){
+      console.log("Adding the Onload event listener...");
+      window.addEventListener('load', () => {
+        console.log("The page is loaded, let's register the service worker...");
+        navigator.serviceWorker.register('/service-worker.js')
+          .then(() => {
+            console.log(`Service Worker Registered:`);
+        });
+      })
+    }
+    </script>
   </body>
 </html>
