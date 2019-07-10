@@ -1,13 +1,12 @@
 'use strict';
 
-const CACHE_NAME = 'static-cache-v001';
+const CACHE_NAME = 'Cache-1907101002';
 
 // files to cache here... icons,...
 const FILES_TO_CACHE = [
   "/",
   "/index.html",
   "favicon.ico",
-  "/offline.html",
   "/icons/todo-icon-64x64.png",
   "/icons/todo-icon-128x128.png",
   "/icons/todo-icon-256x256.png",
@@ -19,9 +18,9 @@ self.addEventListener('install', (evt) => {
   evt.waitUntil(
     caches.open(CACHE_NAME)
     .then((cache) => {
+      cache.addAll(FILES_TO_CACHE);
       console.log(`${FILES_TO_CACHE.length} files had been cached`);
       console.table(FILES_TO_CACHE);
-      cache.addAll(FILES_TO_CACHE);
     })
   );
   self.skipWaiting();
@@ -45,17 +44,13 @@ self.addEventListener('activate', (evt) => {
 self.addEventListener('fetch', (evt) => {
   console.log('[ServiceWorker] Fetch', evt.request.url + '_-_-_-_-' + evt.request.mode);
 
-  if (evt.request.mode !== 'navigate'){
-    return;
-  }
-
   evt.respondWith(
-    fetch(evt.request)
-    .catch(() => {
-      return caches.open(CACHE_NAME)
-      .then((cache) => {
-        return cache.match('offline.html')
-      })
-    })
-  );
+    caches.open(CACHE_NAME).then(function(cache) {                // Open the cache
+      return cache.match(evt.request).then(function(response){    // get the requested resourcefrom the cache
+        return response || fetch(evt.request).then(function(response){  // if empty
+          cache.put(evt.request, response.clone());
+          return response;
+        });
+      });
+    }));
 });

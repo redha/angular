@@ -32,22 +32,30 @@ npm run lint
 ```
 
 ## Working on
-[X] Add visibility property to the task
-[X] Do not delete task, mark it as invisible instead
-[X] Empty Recylle Bin
-[X] Issue: On chromium, the input got borders onfocus 
-[ ] Issue: User shouldn't be able to add empty tasks nor extra whitespaces
-[ ] Add button when disabled, set the color to gray instead of black
-[ ] PWA
-    [X] Add manifest.js
-    [ ] Page load is not fast enough !! should I cache index.html ?
-    [X] current page does not repond with 200 when offline
-    [X] Unable to fetch start URL via service worker (related with )
-    [ ] Offline Intgration 
-    [ ] .... list all functionalities here
-[ ] persist all data in Database (or any other storage)
-[ ] Options: Add newest task to the top, Enable RecylceBin, Confirm Before Delete, ...
-[ ] About & Credits (flaticon, vue, github, ...)
+- [ ] Add button when disabled, set the color to gray instead of black
+- [ ] User cannot see the restore button
+- [ ] PWA - issue: unlike icons, buttons are not cached automatically. They sould
+- [ ] On mobile how to enable auto caps
+- [ ] Issue: User shouldn't be able to add empty tasks nor extra whitespaces
+- [ ] All Form inputs should have associated labels (assistive technologies)
+- [ ] buttons are too close to each other (on mobile it sucks)
+- [ ] Persist all data in Database (or any other storage)
+- [ ] Options: Add newest task to the top, Enable RecylceBin, Confirm Before Delete, ...
+- [ ] About & Credits (flaticon, vue, github, ...)
+- [X] Add visibility property to the task
+- [X] Do not delete task, mark it as invisible instead
+- [X] Empty Recylle Bin
+- [X] Issue: On chromium, the input got borders onfocus 
+- [X] PWA: Add manifest.js
+- [X] PWA: Page load is not fast enough !! should I cache index.html ?
+- [X] PWA: current page does not repond with 200 when offline
+- [X] PWA: Unable to fetch start URL via service worker (related with )
+- [X] PWA: Offline Intgration (Basic)
+- [X] PWA: Cache every file at fetch (js, image, ico, html)
+- [X] PWA: fetch index.html or '/' instead of offline.html
+
+### Version 0.3.0 
+* PWA capable
 
 ### Version 0.2.0 
 * Dock the add button to the right of the input area (nowrap)

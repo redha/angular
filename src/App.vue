@@ -1,11 +1,12 @@
 <template>
   <div id="app">
+    <h1 style="text-align:center">00:00</h1>
   <form @submit.prevent="AddTask">
     <input type="text" class="search-input" v-model="taskToAdd" placeholder="Add New Task"/>
     <button type="submit" :disabled="taskToAdd.length < 2">+</button>
   </form>
   <section id="uncompleted">
-    <h2>To Do ({{ uncompletedTasks.length }}): </h2>
+    <h2>My List ({{ uncompletedTasks.length }}): </h2>
     <todo v-for="uncompletedTask in uncompletedTasks" 
           :key="uncompletedTask.id" 
           @complete = "CompleteATask"
@@ -17,7 +18,7 @@
     </div>
   </section>
   <section id="completedTasks" v-if="completedTasks.length > 0">
-    <h2>Completed ({{ completedTasks.length }} / {{ tasksList.length }}): </h2>
+    <h2>Done ({{ completedTasks.length }} / {{ tasksList.length }}): </h2>
     <todo v-for="completedTask in completedTasks" 
             :key="completedTask.id" 
             @delete = "ToggleDeletedTask"   
@@ -106,6 +107,7 @@ body{
   -webkit-font-smoothing: antialiased;
   -moz-osx-font-smoothing: grayscale;
   color: #2c3e50;
+  margin-top: 1rem;
   margin-left:auto;
   min-width: 350px;
 }
