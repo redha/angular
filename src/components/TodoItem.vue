@@ -1,9 +1,9 @@
 <template>
   <div class="todo-item">
     {{ task.label }}
-    <img v-if="!task.done && !task.deleted" src="./../assets/check-mark.svg" @click="$emit('complete', task)" class="action-button" height="15px" width="15px">
-    <img v-if="!task.deleted" src="./../assets/close.svg" @click="$emit('delete', task)" class="action-button" height="13px" width="13px">
-    <img v-if="task.deleted" src="./../assets/upload.svg" @click="$emit('delete', task)" class="action-button" height="15px" width="15px">
+    <img v-if="!task.done && !task.deleted" alt="Task completed" src="./../assets/check-mark.svg" @click="$emit('complete', task)" class="action-button" height="15px" width="15px">
+    <img v-if="!task.deleted" alt="Delete the task" src="./../assets/close.svg" @click="$emit('delete', task)" class="action-button" height="13px" width="13px">
+    <img v-if="task.deleted" alt= "Undelete The task" src="./../assets/upload.svg" @click="$emit('delete', task)" class="action-button" height="15px" width="15px">
   </div>
 </template>
 
@@ -23,15 +23,16 @@ export default {
   width: 90%;
   padding: 10px;
   margin-top: 10px;
-  background: rgba(255, 255, 2555, 0.5);
-  background: rgba(255. 255, 255, 1);
+  background: rgba(255, 255, 2555, 0.2);
   border-radius:5px;
 }
-i{
+img.action-button{
+  width:11px;
+  height:11px;
   float: right;
-  margin: 5px;
   cursor: pointer;
-  margin-top: 0px;
+  margin-left: 10px;
+  margin-top: 5px;
 }
 .action-button{
   margin-left: 5px;

@@ -32,17 +32,16 @@ npm run lint
 ```
 
 ## Working on
-<<<<<<< HEAD
-- [ ] Add button when disabled, set the color to gray instead of black
-- [ ] User cannot see the restore button
-- [ ] PWA - issue: unlike icons, buttons are not cached automatically. They sould
-- [ ] On mobile how to enable auto caps
-- [ ] Issue: User shouldn't be able to add empty tasks nor extra whitespaces
-- [ ] All Form inputs should have associated labels (assistive technologies)
 - [ ] buttons are too close to each other (on mobile it sucks)
+- [ ] Replace the restore Btn
+- [ ] PWA - issue: unlike icons, buttons are not cached automatically. They sould
+- [ ] All Form inputs should have associated labels (assistive technologies)
 - [ ] Persist all data in Database (or any other storage)
-- [ ] Options: Add newest task to the top, Enable RecylceBin, Confirm Before Delete, ...
+- [ ] Options: Add newest task to the top, Enable RecylceBin, Confirm Before Delete, adjust task's label when taping...
 - [ ] About & Credits (flaticon, vue, github, ...)
+- [X] Enable auto caps (the first letter)
+- [X] Add button when disabled, set the color to gray instead of black
+- [X] Issue: User shouldn't be able to add empty tasks nor extra whitespaces
 - [X] Add visibility property to the task
 - [X] Do not delete task, mark it as invisible instead
 - [X] Empty Recylle Bin
@@ -54,29 +53,6 @@ npm run lint
 - [X] PWA: Offline Intgration (Basic)
 - [X] PWA: Cache every file at fetch (js, image, ico, html)
 - [X] PWA: fetch index.html or '/' instead of offline.html
-=======
-- [X] Add visibility property to the task
-- [X] Do not delete task, mark it as invisible instead
-- [X] Empty Recylle Bin
-- [X] Issue: On chromium, the input got borders onfocus 
-- [ ] Issue: User shouldn't be able to add empty tasks nor extra whitespaces
-- [ ] Add button when disabled, set the color to gray instead of black
-- [ ] All Form inputs should have associated labels (assistive technologies)
-- [X] PWA
--     [X] Add manifest.js
--     [X] Page load is not fast enough !! should I cache index.html ?
--     [X] current page does not repond with 200 when offline
--     [X] Unable to fetch start URL via service worker (related with )
--     [X] Offline Intgration (Basic)
-- [X] PWA Enhacements
--     [X] Cache every file at fetch (js, image, ico, html)
--     [X] fetch index.html or '/' instead of offline.html
-- [ ] buttons are too close to each other (on mobile it sucks)
-- [ ] User cannot see the restire button
-- [ ] Persist all data in Database (or any other storage)
-- [ ] Options: Add newest task to the top, Enable RecylceBin, Confirm Before Delete, ...
-- [ ] About & Credits (flaticon, vue, github, ...)
->>>>>>> ae99fbbfbe1cc277655707cef420fdeb572a9143
 
 ### Version 0.3.0 
 * PWA capable

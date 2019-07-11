@@ -1,8 +1,12 @@
 <template>
   <div id="app">
-    <h1 style="text-align:center">00:00</h1>
+    <h1 style="text-align:center">01:24</h1>
   <form @submit.prevent="AddTask">
-    <input type="text" class="search-input" v-model="taskToAdd" placeholder="Add New Task"/>
+    <input type="text" class="new-task-input" 
+      v-model="taskToAdd" 
+      autofocus
+      placeholder="New Task"
+      >
     <button type="submit" :disabled="taskToAdd.length < 2">+</button>
   </form>
   <section id="uncompleted">
@@ -46,17 +50,27 @@ export default {
     Todo
   },
   data:function() {
-    return (
-      {
-    tasksList:[],
-    taskToAdd: "",
-      }
-    )
+    return ({
+      tasksList:[],
+      taskToAdd: "",
+      })
+  },
+  watch: { // If option adjust when typing
+    taskToAdd: function(value){
+      this.taskToAdd = value.replace(/\s+/g, " ").replace(/^\s/g, "");
+      if (this.taskToAdd.length == 1)
+        this.taskToAdd = this.taskToAdd.toLocaleUpperCase();
+    }
   },
   methods:{
     AddTask: function(){
+      let newTask = this.taskToAdd.replace(/\s+/g, " ").trim();
+      console.log(`newTask: ${newTask}`);
+      if (newTask.length == 0)
+        return;
       var i = new Date().getTime();
-      this.tasksList.unshift({id: i, label:this.taskToAdd, done:false, deleted:false});
+
+      this.tasksList.unshift({id: i, label:newTask, done:false, deleted:false});
       
       this.taskToAdd = "";
     },
@@ -98,7 +112,7 @@ export default {
   box-sizing: border-box;
 }
 body{
-  background-image: linear-gradient(120deg, #aa7bc3, #944bbb);
+  background-image: linear-gradient(10deg, #c2cae8, #8789c0);
   min-height:100vh;
   margin:0px 20px;
 }
@@ -109,7 +123,6 @@ body{
   color: #2c3e50;
   margin-top: 1rem;
   margin-left:auto;
-  min-width: 350px;
 }
 
 section{
@@ -131,10 +144,17 @@ button{
   color:black;
   cursor: pointer;
 }
+button[type=submit]:disabled{
+  visibility: hidden;
+}
 *:focus {
     outline: none;
 }
-.search-input{
+input:invalid{
+ border-bottom: solid 1px red;
+ color: #555;
+}
+.new-task-input{
   width:90%;
   border-bottom: solid 2px #222;
   padding-right: 1.5rem;

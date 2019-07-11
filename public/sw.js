@@ -1,11 +1,15 @@
 'use strict';
 
-const CACHE_NAME = 'Cache-1907101002';
+const CACHE_NAME = 'Cache-1907112250';
+
 
 // files to cache here... icons,...
 const FILES_TO_CACHE = [
   "/",
   "/index.html",
+  "/img/check-mark.svg",
+  "/img/close.svg",
+  "/img/upload.svg",
   "favicon.ico",
   "/icons/todo-icon-64x64.png",
   "/icons/todo-icon-128x128.png",
@@ -43,14 +47,26 @@ self.addEventListener('activate', (evt) => {
 
 self.addEventListener('fetch', (evt) => {
   console.log('[ServiceWorker] Fetch', evt.request.url + '_-_-_-_-' + evt.request.mode);
+  
+  //evt.request: does not conatain sockjs-node, nor hot-update
+  if (evt.request.url.indexOf("sockjs-node") > 0 || evt.request.url.indexOf("hot-update") > 0){
+    console.log(`****!! I'm not gonna cache ${evt.request.url}`);
+    evt.respondWith(fetch(evt.request.url));
+    console.log("$$$$$ $$$$$ returning....");
+    return;
+  }
+  else{
 
-  evt.respondWith(
-    caches.open(CACHE_NAME).then(function(cache) {                // Open the cache
-      return cache.match(evt.request).then(function(response){    // get the requested resourcefrom the cache
-        return response || fetch(evt.request).then(function(response){  // if empty
-          cache.put(evt.request, response.clone());
-          return response;
+    evt.respondWith(
+      caches.open(CACHE_NAME).then(function(cache) {                // Open the cache
+        return cache.match(evt.request).then(function(response){    // get the requested resourcefrom the cache
+          return response || fetch(evt.request).then(function(response){  // if empty
+            cache.put(evt.request, response.clone());
+            return response;
+          });
         });
-      });
-    }));
-});
+      }));
+
+    }    
+
+  });
