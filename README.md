@@ -32,20 +32,28 @@ npm run lint
 ```
 
 ## Working on
-- [ ] buttons are too close to each other (on mobile it sucks)
-- [ ] Replace the restore Btn
-- [ ] PWA - issue: unlike icons, buttons are not cached automatically. They sould
-- [ ] All Form inputs should have associated labels (assistive technologies)
-- [ ] Persist all data in Database (or any other storage)
-- [ ] Options: Add newest task to the top, Enable RecylceBin, Confirm Before Delete, adjust task's label when taping...
+### Design (CSS & HTML)
+- [ ] Set the font size in proportion of the viewport's height (or width ?)
+- [ ] If user clicks on the add button, the keyboard disappears and the input looses focus
+- [ ] Add a little margin on the bottom, the last item sticks to the window's bottom 
+- [ ] All Form inputs should have associated labels (assistive technologies), add alt attr to all images
+- [ ] Buttons are too close to each other (UX on mobile sucks)
+- [ ] Get rid of the vertical scroll
 - [ ] About & Credits (flaticon, vue, github, ...)
+- [X] Replace the restore Btn or change its color (coz it's too light)
+- [X] mask the add button if the form is invalid
+- [X] Issue: On chromium, the input got borders onfocus 
+
+### Dev
+- [ ] Persist all data in Database (or any other form of storage)
+- [ ] PWA - issue: unlike icons, buttons are not cached automatically. They should
+- [ ] AUTO UPDATE THE APP.
+- [ ] Issue: On mobile it freezes or the buttons are almost unclickable how to know
+- [ ] Options: Add newest task to the top, Enable RecylceBin, Confirm Before Delete, adjust task's label when taping...
 - [X] Enable auto caps (the first letter)
-- [X] Add button when disabled, set the color to gray instead of black
 - [X] Issue: User shouldn't be able to add empty tasks nor extra whitespaces
 - [X] Add visibility property to the task
 - [X] Do not delete task, mark it as invisible instead
-- [X] Empty Recylle Bin
-- [X] Issue: On chromium, the input got borders onfocus 
 - [X] PWA: Add manifest.js
 - [X] PWA: Page load is not fast enough !! should I cache index.html ?
 - [X] PWA: current page does not repond with 200 when offline
@@ -53,6 +61,7 @@ npm run lint
 - [X] PWA: Offline Intgration (Basic)
 - [X] PWA: Cache every file at fetch (js, image, ico, html)
 - [X] PWA: fetch index.html or '/' instead of offline.html
+- [X] Add Action: Empty Recylle Bin
 
 ### Version 0.3.0 
 * PWA capable
