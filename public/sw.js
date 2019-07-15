@@ -1,6 +1,6 @@
 'use strict';
 
-const CACHE_NAME = 'Cache-1907112250';
+const CACHE_NAME = 'Cache-1907151400';
 
 
 // files to cache here... icons,...

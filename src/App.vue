@@ -1,5 +1,8 @@
 <template>
   <div id="app">
+    <div class="toolbar">
+      <button @click="Refresh">Refresh</button>
+    </div>
     <h1 style="text-align:center">01:24</h1>
   <form @submit.prevent="AddTask">
     <input type="text" class="new-task-input" 
@@ -38,11 +41,13 @@
             :task="deletedTask"
       />
   </section>
+
 </div>
 </template>
 
 <script>
 import Todo from './components/TodoItem.vue'
+import dbMgr from './db/taskdb'
 
 export default {
   name: 'app',
@@ -63,43 +68,51 @@ export default {
     }
   },
   methods:{
-    AddTask: function(){
-      let newTask = this.taskToAdd.replace(/\s+/g, " ").trim();
-      console.log(`newTask: ${newTask}`);
-      if (newTask.length == 0)
+    Refresh: function(){
+      this.tasksList = dbMgr.GetAllTasks();
+    },
+    AddTask: async function(){
+      let newTasksLabel = this.taskToAdd.replace(/\s+/g, " ").trim();
+      console.log(`newTasksLabel: ${newTasksLabel}`);
+      if (newTasksLabel.length == 0)
         return;
       var i = new Date().getTime();
-
-      this.tasksList.unshift({id: i, label:newTask, done:false, deleted:false});
+      let newTask = {id: i, label:newTasksLabel, done:-1, deleted:1};
+      this.tasksList.push(newTask);
+      await dbMgr.AddThisTask(newTask);
       
       this.taskToAdd = "";
     },
     CompleteATask: function (task){
-      task.done = true;
+      task.done = 100;
       //console.log(event);
     },
     ToggleDeletedTask: function(task){
       var i = this.tasksList.indexOf(task);
       if (i < 0) 
         return;
-      this.tasksList[i].deleted = this.tasksList[i].deleted ? false : true;
+      this.tasksList[i].deleted = this.tasksList[i].deleted === 1 ? 0 : 1;
     },
     EmptyRecycleBin: function (){
-      this.tasksList = this.tasksList.filter(t => !t.deleted)
+      if(dbMgr.EmptyTrash())
+        this.tasksList = this.tasksList.filter(t => t.deleted !== 1);
+      else
+      this.Refresh();
     },
   },
+
   computed:{
     completedTasks: function () {
       // return the completed tasks only
-      return this.tasksList.filter ( (t) => t.done && t.deleted === false )
+      return this.tasksList.filter ( (t) => t.done >= 100 && t.deleted !== 1 )
     },
     uncompletedTasks: function () {
       // return the uncompleted tasks only
-      return this.tasksList.filter ( (t) => !t.done && t.deleted === false )
+      return this.tasksList.filter ( (t) => t.done < 100 && t.deleted !== 1 )
     },
     deletedTasks: function(){
       // return the uncompleted tasks only
-      return this.tasksList.filter ( (t) => t.deleted === true )
+      return this.tasksList.filter ( (t) => t.deleted === 1 )
     }
   }
 }

@@ -1,9 +1,9 @@
 <template>
   <div class="todo-item">
     {{ task.label }}
-    <img v-if="!task.done && !task.deleted" alt="Task completed" src="./../assets/check-mark.svg" @click="$emit('complete', task)" class="action-button" height="15px" width="15px">
-    <img v-if="!task.deleted" alt="Delete the task" src="./../assets/close.svg" @click="$emit('delete', task)" class="action-button" height="13px" width="13px">
-    <img v-if="task.deleted" alt= "Undelete The task" src="./../assets/upload.svg" @click="$emit('delete', task)" class="action-button" height="15px" width="15px">
+    <img v-if="task.done < 100 && task.deleted !== 1" alt="Task completed" src="./../assets/check-mark.svg" @click="$emit('complete', task)" class="action-button" height="15px" width="15px">
+    <img v-if="task.deleted !== 1" alt="Delete the task" src="./../assets/close.svg" @click="$emit('delete', task)" class="action-button" height="13px" width="13px">
+    <img v-if="task.deleted === 1" alt= "Undelete The task" src="./../assets/upload.svg" @click="$emit('delete', task)" class="action-button" height="15px" width="15px">
   </div>
 </template>
 

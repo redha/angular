@@ -45,7 +45,10 @@ npm run lint
 - [X] Issue: On chromium, the input got borders onfocus 
 
 ### Dev
-- [ ] Persist all data in Database (or any other form of storage)
+- [X] Database: OnAdd
+- [X] Database: Refresh All data
+- [X] Database: EmptyRecycleBin
+- [ ] Database: OnUpdate (Complete, ToggleDelete)
 - [ ] PWA - issue: unlike icons, buttons are not cached automatically. They should
 - [ ] AUTO UPDATE THE APP.
 - [ ] Issue: On mobile it freezes or the buttons are almost unclickable how to know
