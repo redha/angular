@@ -1,6 +1,6 @@
 'use strict';
 
-const CACHE_NAME = 'Cache-1907151400';
+const CACHE_NAME = 'Cache-190717233';
 
 
 // files to cache here... icons,...
@@ -18,7 +18,7 @@ const FILES_TO_CACHE = [
 ];
 
 self.addEventListener('install', (evt) => {
-  console.log('[ServiceWorker] Install');
+  console.log('[SW] Install');
   evt.waitUntil(
     caches.open(CACHE_NAME)
     .then((cache) => {
@@ -31,7 +31,7 @@ self.addEventListener('install', (evt) => {
 });
 
 self.addEventListener('activate', (evt) => {
-  console.log('[ServiceWorker] Activate');
+  console.log('[SW] Activate');
   // Todo: Remove all previously cached files.
   evt.waitUntil(
     caches.keys().then((keyList) => {
@@ -46,13 +46,12 @@ self.addEventListener('activate', (evt) => {
 });
 
 self.addEventListener('fetch', (evt) => {
-  console.log('[ServiceWorker] Fetch', evt.request.url + '_-_-_-_-' + evt.request.mode);
+  console.log('[SW] Fetch', evt.request.url + '_-_-_-_-' + evt.request.mode);
   
   //evt.request: does not conatain sockjs-node, nor hot-update
   if (evt.request.url.indexOf("sockjs-node") > 0 || evt.request.url.indexOf("hot-update") > 0){
-    console.log(`****!! I'm not gonna cache ${evt.request.url}`);
+    //console.log(`****!! I'm not gonna cache ${evt.request.url}`);
     evt.respondWith(fetch(evt.request.url));
-    console.log("$$$$$ $$$$$ returning....");
     return;
   }
   else{

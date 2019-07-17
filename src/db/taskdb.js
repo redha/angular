@@ -7,24 +7,28 @@ let database = null;
 let errored = false;
 
 // Create the database
-console.log(`init...`, database);
+(
+    function(){
+        console.log("[DB] What the heck on eath is this syntaxe ?? *****(function(){.....})();*****");
+    }
+)();
 
 if (!window.indexedDB){
-    console.log(`Error: Browser does not support indexedDB !!`);
+    console.log(`[DB] Error: Your browser does not support indexedDB !!`);
     errored = true;
 }
 else{
-    console.log(`IndexedDB supported. OK ...`);
+    console.log(`[DB] IndexedDB supported. OK ...`);
     let req = window.indexedDB.open(DB_NAME, DB_CURRENT_VERSION);
     // Management OnSuccess
     req.onsuccess = function(event){
         database = event.target.result; // OLD CODE ?
         // database = req.result;
-        console.log(`Database successfully Opened !!`);
+        console.log(`[DB] Database successfully Opened !!`);
     };
     // Management OnError
     req.onerror = function(event){
-        console.log(`Error: Permission denied !!`, event.target.errorCode);
+        console.log(`[DB] Error: Permission denied !!`, event.target.errorCode);
     };
     // Management OnUpgradeNeeded
     req.onupgradeneeded = function(event){
@@ -49,106 +53,162 @@ else{
     };
     // Management ONSUCCESS
     req.onblocked = function(event){
-        console.log(`database migration blocked. Please close all other instance and reload the app.`);
+        console.log(`[DB] database migration blocked. Please close all other instance and reload the app.`);
     };
 }
 
 // Creating the Store
-console.log('Creating the store...');
+console.log('[DB] Creating the store...');
 
-function AddATask (tasktoAdd){
-    if (errored)
-        throw "ERROR: Cannot proceed we already had an error";
+function CheckDB(){
     if (!database)
-        throw "ERROR: No database to work with";
-    let report = null; // nothing happened !
-    console.log(`Adding task: `);
-    console.log(tasktoAdd);
-
-    if (tasktoAdd && tasktoAdd.label && tasktoAdd.label.trim().length > 0){
-        console.log(`Creating the objectStore with readwrite mode`);
-        let tx = database.transaction(DB_TASKS_STORE, "readwrite");
-        let tasksRW = tx.objectStore(DB_TASKS_STORE);
-        console.log("Task ObjectStore: ", tasksRW);
-        if(tasksRW){
-            let req = tasksRW.add(tasktoAdd);
-            console.log(`Adding task ....`);
-            req.onsuccess = function(event){
-                console.log(`task Added successfully`, event);
-                report = `task Added successfully`;
-            };
-            req.onerror = function(event){
-                console.log(`ERROR: can't add new task !`, req.error);
-                report = `ERROR: can't add new task ${req.error}`;
-            };
-        }
-        else{
-            console.log('Sorry, I got no ObjectStore!');
-        }
-    }
-}
-
-function ReadAllTasks(){
-    if(!database)
-        throw "The Database object is empty !!";
-    let allTasks = [];
-    let tx = database.transaction(DB_TASKS_STORE, "readonly");
-    if(!tx)
-        throw "Cannot get transaction for reading all tasks";
-    let tasksR = tx.objectStore(DB_TASKS_STORE);
-    let req = tasksR.openCursor();
-    req.onsuccess = function(event){
-        // let cursor = req.result;
-        let cursor = event.target.result;
-        if (cursor){
-            allTasks.push(cursor.value);
-            cursor.continue();
-        }
-        console.log("Cursor Opened");
-    }
-    req.onerror = function (event){
-        console.log("Cannot get a cursor", event);
-    } 
-    return allTasks;
-}
-
-function EmptyTheTrash(){
-    let tx = database.transaction(DB_TASKS_STORE, "readwrite");
-    if(!tx)
-        throw "Cannot get transaction to empty the trash";
-    console.log("Transaction created to EMPTY THE RECYCLEBIN");
-
-    let tasksRWStore = tx.objectStore(DB_TASKS_STORE);
-    console.log("Got the ObjectStore. OK");
-
-    let deleteIndex = tasksRWStore.index("deletedIdx");
-    let rq = deleteIndex.openKeyCursor(IDBKeyRange.only(1)); // get the tasks keys marked for deletion only
-    console.log(`Got the ${deleteIndex.count()} tasks marked as deleted`);
-
-    rq.onsuccess = function(event){
-        let cursor = rq.result;
-        if(cursor){
-            tasksRWStore.delete(cursor.primaryKey);
-            cursor.continue();
-        }
-    }
-
-    rq.onerror = function(event){
-        return false;
-    }
-
-    return true;
+        throw "[DB] The Database object is empty !!";
+    if (errored)
+        throw "[DB] The DB Connector is in ERRORED State. I Can't continue.";
 }
 
 let dbMgr = {
-    AddThisTask: function(task){
-        AddATask(task);
+    AddThisTask: function(tasktoAdd){
+        if (errored)
+        throw "[DB] ERROR: Cannot proceed we already had an error";
+        if (!database)
+            throw "[DB] ERROR: No database to work with";
+        let report = null; // nothing happened !
+        console.log(`[DB] Adding task: `);
+        console.log(tasktoAdd);
+
+        if (tasktoAdd && tasktoAdd.label && tasktoAdd.label.trim().length > 0){
+            console.log(`[DB] Creating the objectStore with readwrite mode`);
+            let tx = database.transaction(DB_TASKS_STORE, "readwrite");
+            let tasksRW = tx.objectStore(DB_TASKS_STORE);
+            console.log("[DB] Task ObjectStore: ", tasksRW);
+            if(tasksRW){
+                let req = tasksRW.add(tasktoAdd);
+                console.log(`[DB] Adding task ....`);
+                req.onsuccess = function(event){
+                    console.log(`[DB] task Added successfully`, event);
+                    report = `[DB] task Added successfully`;
+                };
+                req.onerror = function(event){
+                    console.log(`[DB] ERROR: can't add new task !`, req.error);
+                    report = `[DB] ERROR: can't add new task ${req.error}`;
+                };
+            }
+            else{
+                console.log('[DB] Sorry, I got no ObjectStore!');
+            }
+        }
+    },
+    GetOneTask: function(){
+        throw "GetOneTask: Not implemented yet";
     },
     GetAllTasks: function(){
-        return ReadAllTasks();
+        CheckDB();
+        let allTasks = [];
+        let tx = database.transaction(DB_TASKS_STORE, "readonly");
+        if(!tx)
+            throw "[DB] Cannot get transaction for reading all tasks";
+        let tasksR = tx.objectStore(DB_TASKS_STORE);
+        let req = tasksR.openCursor();
+        req.onsuccess = function(event){
+            // let cursor = req.result;
+            let cursor = event.target.result;
+            if (cursor){
+                allTasks.push(cursor.value);
+                cursor.continue();
+            }
+        }
+        req.onerror = function (event){
+            console.log("[DB] Cannot get a cursor", event);
+        }
+        return allTasks;
     },
     EmptyTrash: function(){
-        return EmptyTheTrash();
+        let tx = database.transaction(DB_TASKS_STORE, "readwrite");
+        if(!tx)
+            throw "[DB] Cannot get transaction to empty the trash";
+        console.log("[DB] Transaction created to EMPTY THE RECYCLEBIN");
+    
+        let tasksRWStore = tx.objectStore(DB_TASKS_STORE);
+        console.log("[DB] Got the ObjectStore. OK");
+    
+        let deleteIndex = tasksRWStore.index("deletedIdx");
+        let rq = deleteIndex.openKeyCursor(IDBKeyRange.only(1)); // get the tasks keys marked for deletion only
+        console.log(`[DB] Got tasks marked as deleted`);
+    
+        rq.onsuccess = function(event){
+            let cursor = rq.result;
+            if(cursor){
+                tasksRWStore.delete(cursor.primaryKey);
+                cursor.continue();
+            }
+        }
+    
+        rq.onerror = function(event){
+            return false;
+        }
+    
+        return true;
+    },
+    UpdateTask: function (task, property, newValue){
+        if (!task || !task.id)
+            throw "the task Object is not valid";
+        let id = task.id;
+        let newTask = null;
+        console.log(`[DB] Set task (id = ${id}), property: ${property} = ${newValue}`);
+        CheckDB();
+
+        // Get the task from database
+        // Create a transaction on tasks objects store on readwrite mode
+        let tx = database.transaction(DB_TASKS_STORE, "readwrite")
+        if (!tx)
+            throw "[DB] cannot create a transaction !!";
+        
+            //console.log(`Successfully create a transaction !!`, tx);
+        
+        // The object store
+        let tasksRWObjectStore = tx.objectStore(DB_TASKS_STORE);
+        if (!tasksRWObjectStore)
+            throw "[DB] cannot create an objectstore fro the transaction !!";
+        //console.log(`Successfully create an object store !!`, tasksRWObjectStore);
+        
+        // The cursor, if there is one, use a teporary intermediate variable to run the update command
+        let req = tasksRWObjectStore.openCursor(IDBKeyRange.only(id));
+
+        console.log(`[DB] The Cursor is: `,req);
+
+        req.onsuccess = function(event){
+            let cursor = req.result;
+            if (cursor){
+                console.log(`[DB] Cursor is on  @ ${cursor.value.id}`);
+
+                newTask = cursor.value;
+                // console.log(`[DB] BEFORE newTask from cursor is .....`, newTask);
+                newTask[property] = newValue;
+                console.log(`[DB] AFTER newTask  is .....`, newTask);
+
+                let updateReq = cursor.update(newTask);
+                updateReq.onsuccess = function(event){
+                    console.log("[DB] Update successfully!");
+
+                    // THIS CODE IS DEACTIVATED
+                    // updateReq.result will contain the updated record's primary key
+                    // Here we try to read the whole updated updated record, in case the record had been updated from another tab
+
+                    // let theNewTaskRequest = tasksRWObjectStore.get(updateReq.result);
+                    // theNewTaskRequest.onsuccess = function(event){
+                    //     console.log(`The new Record now is :`, theNewTaskRequest.result);
+                    //     newTask = theNewTaskRequest.result;
+                    // }
+
+                    // END OF DEACTIVATED CODE
+                }
+                cursor.continue();
+            }
+            return newTask;
+        };
+        //console.log(`[DB] the task now is:.........`, newTask)
+        return newTask;
     },
     Errored: () => errored
 }

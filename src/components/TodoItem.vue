@@ -20,23 +20,26 @@ export default {
 
 <style scoped>
 .todo-item{
-  width: 90%;
+  width: 100%;
   padding: 10px;
-  margin-top: 10px;
-  background: rgba(255, 255, 2555, 0.2);
+  margin-top: 2px;
+  /* 
+  background: rgba(255, 255, 255, 0.2);
   border-radius:5px;
+  box-shadow: 1px 0px 2px 1px #777; 
+  */
+  border-bottom: 1px solid rgba(100, 100, 100, 0.2);
+
+}
+.todo-item:hover{
+  border-bottom: 1px solid rgba(50, 50, 50, 0.2);
 }
 img.action-button{
   width:11px;
   height:11px;
+  margin-top: 5px;
+  margin-left: 10px;
   float: right;
   cursor: pointer;
-  margin-left: 10px;
-  margin-top: 5px;
-}
-.action-button{
-  margin-left: 5px;
-  float:right;
-  cursor:pointer;
 }
 </style>

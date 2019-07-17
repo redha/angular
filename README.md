@@ -48,11 +48,13 @@ npm run lint
 - [X] Database: OnAdd
 - [X] Database: Refresh All data
 - [X] Database: EmptyRecycleBin
-- [ ] Database: OnUpdate (Complete, ToggleDelete)
+- [X] Database: OnUpdate (Complete, ToggleDelete)
 - [ ] PWA - issue: unlike icons, buttons are not cached automatically. They should
 - [ ] AUTO UPDATE THE APP.
 - [ ] Issue: On mobile it freezes or the buttons are almost unclickable how to know
 - [ ] Options: Add newest task to the top, Enable RecylceBin, Confirm Before Delete, adjust task's label when taping...
+- [ ] Autoload tasks at application startup
+- [ ] Refresh causes list flicking, make it smoother
 - [X] Enable auto caps (the first letter)
 - [X] Issue: User shouldn't be able to add empty tasks nor extra whitespaces
 - [X] Add visibility property to the task
@@ -65,6 +67,9 @@ npm run lint
 - [X] PWA: Cache every file at fetch (js, image, ico, html)
 - [X] PWA: fetch index.html or '/' instead of offline.html
 - [X] Add Action: Empty Recylle Bin
+
+### Version 0.4.0 
+* IndexedDB capable
 
 ### Version 0.3.0 
 * PWA capable
