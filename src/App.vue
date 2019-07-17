@@ -1,6 +1,10 @@
 <template>
   <div id="app">
-    <h1 style="text-align:center">01:24</h1>
+    <ul class="nav">
+      <li @click="Refresh">Refresh</li>
+      <li v-show="deletedTasks.length" @click="EmptyRecycleBin">Empty Trash<sup>{{ deletedTasks.length }}</sup></li>
+    </ul>
+    <h1 style="text-align:center">HH:mm</h1>
   <form @submit.prevent="AddTask">
     <input type="text" class="new-task-input" 
       v-model="taskToAdd" 
@@ -30,7 +34,7 @@
       />
   </section>
   <section id="deletedTasks" v-if="deletedTasks.length > 0">
-    <a href="" @click.prevent="EmptyRecycleBin" class="btn danger">Detete All<sup>{{ deletedTasks.length }}</sup></a>
+    <h2>Trash<sup>{{ deletedTasks.length }}</sup></h2>
     
     <todo v-for="deletedTask in deletedTasks" 
             :key="deletedTask.id" 
@@ -38,11 +42,13 @@
             :task="deletedTask"
       />
   </section>
+
 </div>
 </template>
 
 <script>
 import Todo from './components/TodoItem.vue'
+import dbMgr from './db/taskdb'
 
 export default {
   name: 'app',
@@ -63,44 +69,64 @@ export default {
     }
   },
   methods:{
+    Refresh: function(){
+      this.tasksList = dbMgr.GetAllTasks();
+    },
     AddTask: function(){
-      let newTask = this.taskToAdd.replace(/\s+/g, " ").trim();
-      console.log(`newTask: ${newTask}`);
-      if (newTask.length == 0)
+      let newTasksLabel = this.taskToAdd.replace(/\s+/g, " ").trim();
+      console.log(`newTasksLabel: ${newTasksLabel}`);
+      if (newTasksLabel.length == 0)
         return;
       var i = new Date().getTime();
-
-      this.tasksList.unshift({id: i, label:newTask, done:false, deleted:false});
+      let newTask = {id: i, label: newTasksLabel, done: -1, deleted: 0};
+      this.tasksList.push(newTask);
+      dbMgr.AddThisTask(newTask);
       
       this.taskToAdd = "";
     },
     CompleteATask: function (task){
-      task.done = true;
-      //console.log(event);
+      try{
+        dbMgr.UpdateTask(task, "done", 100);
+        task.done = 100;
+      }
+      catch(e){
+        console.error(e);
+      }
     },
     ToggleDeletedTask: function(task){
-      var i = this.tasksList.indexOf(task);
-      if (i < 0) 
-        return;
-      this.tasksList[i].deleted = this.tasksList[i].deleted ? false : true;
-    },
+      let newDeletedFlag = task.deleted === 1 ? 0 : 1;
+      try{
+        dbMgr.UpdateTask(task, "deleted", newDeletedFlag);
+        task.deleted = newDeletedFlag;
+      }
+      catch(e){
+        console.error(e);
+      }
+  },
     EmptyRecycleBin: function (){
-      this.tasksList = this.tasksList.filter(t => !t.deleted)
+      if(dbMgr.EmptyTrash())
+        this.tasksList = this.tasksList.filter(t => t.deleted !== 1);
+      else
+      this.Refresh();
     },
   },
+
   computed:{
     completedTasks: function () {
       // return the completed tasks only
-      return this.tasksList.filter ( (t) => t.done && t.deleted === false )
+      return this.tasksList.filter ( (t) => t.done >= 100 && t.deleted !== 1 )
     },
     uncompletedTasks: function () {
       // return the uncompleted tasks only
-      return this.tasksList.filter ( (t) => !t.done && t.deleted === false )
+      return this.tasksList.filter ( (t) => t.done < 100 && t.deleted !== 1 )
     },
     deletedTasks: function(){
       // return the uncompleted tasks only
-      return this.tasksList.filter ( (t) => t.deleted === true )
+      return this.tasksList.filter ( (t) => t.deleted === 1 )
     }
+  },
+  mounted: function(){
+    console.log("%%%%Mounted Event %%%%");
   }
 }
 </script>
@@ -121,8 +147,9 @@ body{
   -webkit-font-smoothing: antialiased;
   -moz-osx-font-smoothing: grayscale;
   color: #2c3e50;
-  margin-top: 1rem;
+  margin-top: 25px;
   margin-left:auto;
+  padding: 1rem 0;
 }
 
 section{
@@ -147,12 +174,9 @@ button{
 button[type=submit]:disabled{
   visibility: hidden;
 }
-*:focus {
+
+input:focus {
     outline: none;
-}
-input:invalid{
- border-bottom: solid 1px red;
- color: #555;
 }
 .new-task-input{
   width:90%;
@@ -163,8 +187,16 @@ sup {
   font-size:x-small;
   color:white;
   background-color:#e74c3c;
-  padding: 3px;
-  border-radius:30%;
-	margin-left:3px;
+  padding: 5px;
+  border-radius:50%;
+	margin-left:1px;
+}
+ul.nav{
+  margin-bottom: 1rem;
+}
+ul.nav > li {
+  display: inline;
+  margin: 10px;
+  cursor: pointer;
 }
 </style>
