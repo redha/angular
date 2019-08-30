@@ -9,7 +9,7 @@
     <input type="text" class="new-task-input" 
       v-model="taskToAdd" 
       autofocus
-      placeholder="New Task"
+      placeholder="Add New Task ..."
       >
     <button type="submit" :disabled="taskToAdd.length < 2">+</button>
   </form>
@@ -79,15 +79,14 @@ export default {
         return;
       var i = new Date().getTime();
       let newTask = {id: i, label: newTasksLabel, done: -1, deleted: 0};
-      this.tasksList.push(newTask);
-      dbMgr.AddThisTask(newTask);
+      
+      dbMgr.addTask(newTask, this.tasksList);
       
       this.taskToAdd = "";
     },
     CompleteATask: function (task){
       try{
         dbMgr.UpdateTask(task, "done", 100);
-        task.done = 100;
       }
       catch(e){
         console.error(e);
@@ -97,7 +96,6 @@ export default {
       let newDeletedFlag = task.deleted === 1 ? 0 : 1;
       try{
         dbMgr.UpdateTask(task, "deleted", newDeletedFlag);
-        task.deleted = newDeletedFlag;
       }
       catch(e){
         console.error(e);
@@ -113,20 +111,17 @@ export default {
 
   computed:{
     completedTasks: function () {
-      // return the completed tasks only
       return this.tasksList.filter ( (t) => t.done >= 100 && t.deleted !== 1 )
     },
     uncompletedTasks: function () {
-      // return the uncompleted tasks only
       return this.tasksList.filter ( (t) => t.done < 100 && t.deleted !== 1 )
     },
     deletedTasks: function(){
-      // return the uncompleted tasks only
       return this.tasksList.filter ( (t) => t.deleted === 1 )
     }
   },
   mounted: function(){
-    console.log("%%%%Mounted Event %%%%");
+    console.log("$$ The App is Mounted $$ ");
   }
 }
 </script>
@@ -138,8 +133,8 @@ export default {
   box-sizing: border-box;
 }
 body{
-  background-image: linear-gradient(10deg, #c2cae8, #8789c0);
-  min-height:100vh;
+  /* background-image: linear-gradient(10deg, white, #c2cae8); */
+  background-color: #fff;
   margin:0px 20px;
 }
 #app {
@@ -147,9 +142,12 @@ body{
   -webkit-font-smoothing: antialiased;
   -moz-osx-font-smoothing: grayscale;
   color: #2c3e50;
+  min-height: 95vh;
+  background-color: #eee;
   margin-top: 25px;
   margin-left:auto;
-  padding: 1rem 0;
+  padding: 1rem 1rem;
+  border-radius: 7px;
 }
 
 section{
@@ -179,9 +177,15 @@ input:focus {
     outline: none;
 }
 .new-task-input{
-  width:90%;
+  width:95%;
   border-bottom: solid 2px #222;
   padding-right: 1.5rem;
+}
+.new-task-input::placeholder{
+  color:#777;
+}
+.new-task-input:focus::placeholder{
+  color: #999;
 }
 sup {
   font-size:x-small;

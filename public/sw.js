@@ -1,7 +1,6 @@
 'use strict';
 
-const CACHE_NAME = 'Cache-190717233';
-
+const CACHE_NAME = 'Cache-1908301129';
 
 // files to cache here... icons,...
 const FILES_TO_CACHE = [
@@ -23,16 +22,12 @@ self.addEventListener('install', (evt) => {
     caches.open(CACHE_NAME)
     .then((cache) => {
       cache.addAll(FILES_TO_CACHE);
-      console.log(`${FILES_TO_CACHE.length} files had been cached`);
-      console.table(FILES_TO_CACHE);
     })
   );
   self.skipWaiting();
 });
 
 self.addEventListener('activate', (evt) => {
-  console.log('[SW] Activate');
-  // Todo: Remove all previously cached files.
   evt.waitUntil(
     caches.keys().then((keyList) => {
       Promise.all(keyList.map((key) => {
@@ -46,16 +41,11 @@ self.addEventListener('activate', (evt) => {
 });
 
 self.addEventListener('fetch', (evt) => {
-  console.log('[SW] Fetch', evt.request.url + '_-_-_-_-' + evt.request.mode);
-  
-  //evt.request: does not conatain sockjs-node, nor hot-update
   if (evt.request.url.indexOf("sockjs-node") > 0 || evt.request.url.indexOf("hot-update") > 0){
-    //console.log(`****!! I'm not gonna cache ${evt.request.url}`);
     evt.respondWith(fetch(evt.request.url));
     return;
   }
   else{
-
     evt.respondWith(
       caches.open(CACHE_NAME).then(function(cache) {                // Open the cache
         return cache.match(evt.request).then(function(response){    // get the requested resourcefrom the cache
@@ -65,7 +55,5 @@ self.addEventListener('fetch', (evt) => {
           });
         });
       }));
-
     }    
-
   });
