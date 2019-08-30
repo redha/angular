@@ -6,13 +6,6 @@ const DB_TASKS_STORE = "Tasks";
 let database = null;
 let errored = false;
 
-// Create the database
-(
-    function(){
-        console.log("[DB] What the heck on eath is this syntaxe ?? *****(function(){.....})();*****");
-    }
-)();
-
 if (!window.indexedDB){
     console.log(`[DB] Error: Your browser does not support indexedDB !!`);
     errored = true;
@@ -33,20 +26,19 @@ else{
     // Management OnUpgradeNeeded
     req.onupgradeneeded = function(event){
         console.log(`the current database's version is ${event.oldVersion}`);
+        let tasksStore = event.currentTarget.result.createObjectStore(DB_TASKS_STORE, { keyPath: "id", autoIncrement: true});
         if(!event.oldVersion || event.oldVersion < 1){
             console.log(`Creating database ${DB_NAME} (Version ${DB_CURRENT_VERSION})...`);
-            let store = event.currentTarget.result.createObjectStore(DB_TASKS_STORE, { keyPath: "id", autoIncrement: true});
-            store.createIndex("labelIdx", "label", {unique: false});
-            store.createIndex("idIdx", "id", {unique: true});
+            tasksStore.createIndex("labelIdx", "label", {unique: false});
+            tasksStore.createIndex("idIdx", "id", {unique: true});
         }
 
         if (!event.oldVersion || event.oldVersion < 2){
             console.log(`Migrating the database ${DB_NAME} from V. ${event.oldVersion} to V.2)`);
             let tx = req.transaction;
-            let store = tx.objectStore(DB_TASKS_STORE);
-
-            store.createIndex("deletedIdx", "deleted", {unique: false});
-            store.createIndex("doneIdx", "done", {unique: false});
+            // let store = tx.objectStore(DB_TASKS_STORE); // I was not sober when I wrote that !!
+            tasksStore.createIndex("deletedIdx", "deleted", {unique: false});
+            tasksStore.createIndex("doneIdx", "done", {unique: false});
         }
 
         
@@ -68,14 +60,13 @@ function CheckDB(){
 }
 
 let dbMgr = {
-    AddThisTask: function(tasktoAdd){
+    addTask: function(tasktoAdd, tasksList){
         if (errored)
-        throw "[DB] ERROR: Cannot proceed we already had an error";
+         throw "[DB] ERROR: Cannot proceed we already had an error";
         if (!database)
             throw "[DB] ERROR: No database to work with";
         let report = null; // nothing happened !
-        console.log(`[DB] Adding task: `);
-        console.log(tasktoAdd);
+        console.log(`[DB] Init Adding task `, tasktoAdd);
 
         if (tasktoAdd && tasktoAdd.label && tasktoAdd.label.trim().length > 0){
             console.log(`[DB] Creating the objectStore with readwrite mode`);
@@ -84,18 +75,19 @@ let dbMgr = {
             console.log("[DB] Task ObjectStore: ", tasksRW);
             if(tasksRW){
                 let req = tasksRW.add(tasktoAdd);
-                console.log(`[DB] Adding task ....`);
-                req.onsuccess = function(event){
-                    console.log(`[DB] task Added successfully`, event);
-                    report = `[DB] task Added successfully`;
+                req.onsuccess = function(event) {
+                    console.log(`task added successfully`);
+                    tasktoAdd.id = req.result;
+                    tasksList.push(tasktoAdd);
                 };
-                req.onerror = function(event){
-                    console.log(`[DB] ERROR: can't add new task !`, req.error);
-                    report = `[DB] ERROR: can't add new task ${req.error}`;
-                };
+                req.onerror = function(error){
+                    console.log(`ERROR: the task cannot be added !`);
+                    throw `ERROR: The task cannot be added !`;
+                }
             }
             else{
-                console.log('[DB] Sorry, I got no ObjectStore!');
+                console.log(`[DB] Error: Can't access the 'Tasks Store'`);
+                throw "Error: Can't access the 'Tasks Store'";
             }
         }
     },

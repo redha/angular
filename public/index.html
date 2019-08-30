@@ -4,7 +4,7 @@
     <meta charset="utf-8">
     <meta http-equiv="X-UA-Compatible" content="IE=edge">
     <meta name="viewport" content="width=device-width,initial-scale=1.0">
-    <meta name="descritpion" content="Todo app - work offline sync data when online">
+    <meta name="descritpion" content="Todo app - works offline, sync data when online)">
     <link rel="icon" href="<%= BASE_URL %>favicon.ico">
     <link rel="manifest" href="<%= BASE_URL %>manifest.json">
     <title>Todo</title>
@@ -24,11 +24,8 @@
     <!-- built files will be auto injected -->
     <script>
       // Registering the Service WOrker
-      console.log("I'm in...");
       if ('serviceWorker' in navigator){
-      console.log("Adding the Onload event listener...");
       window.addEventListener('load', () => {
-        console.log("The page is loaded, let's register the service worker...");
         navigator.serviceWorker.register('/sw.js')
           .then(() => {
             console.log(`Service Worker Successfully Registered:`);
